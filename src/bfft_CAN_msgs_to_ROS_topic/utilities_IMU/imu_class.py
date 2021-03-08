@@ -6,18 +6,12 @@ from std_msgs.msg import String
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import Quaternion, Vector3
 
-import transforms3d
-import time
-
-import pandas as pd
-import cantools
-
-class ImuClass():
+class IMUClass():
     """imu class for holding quaternions, angular velocity and linear acceleartion 
     in needed format for standard ros nav message"""
 
     def __init__(self):
-        super(ImuClass, self).__init__()
+        super(IMUClass, self).__init__()
         self.__quat_x=0.0
         self.__quat_y=0.0
         self.__quat_z=0.0

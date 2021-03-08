@@ -29,6 +29,7 @@ class GPSClass():
     
     def set_lat_long(self, latitude, longitude):
         self.__latitude = latitude
+        self.__longitude = longitude
 
     def set_altitude(self, altitude):
         self.__altitude = altitude
