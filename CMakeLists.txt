@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(convert_can_data_to_topic)
+project(bfft_CAN_msgs_to_ROS_topic)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)

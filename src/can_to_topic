@@ -7,7 +7,7 @@ from sensor_msgs.msg import NavSatFix, NavSatStatus, Imu
 from can_msgs.msg import Frame
 from geometry_msgs.msg import Quaternion, Vector3
 
-from convert_can_data_to_topic.msg import Can_id_msg
+from bfft_CAN_msgs_to_ROS_topic.msg import Can_id_msg
 
 import transforms3d
 import time

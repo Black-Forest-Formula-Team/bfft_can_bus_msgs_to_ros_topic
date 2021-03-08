@@ -4,7 +4,7 @@ from distutils.core import setup
 from catkin_pkg.python_setup import generate_distutils_setup
 
 setup_args = generate_distutils_setup(
-     packages=['convert_can_data_to_topic'],
+     packages=['bfft_CAN_msgs_to_ROS_topic'],
      package_dir={'': 'src'}
 )
 
