@@ -14,7 +14,7 @@ class GPSClass():
     - according to ADMA documentation, INS_Lat_Rel and INS_Long_Rel "best position available in sense of precision"
     """
     
-    def __init__(self, lat=0.0, lon=0.0, alt=0.0, time_stamp=1.0):
+    def __init__(self):
         super(GPSClass, self).__init__()
         
         self.__gps_msg = NavSatFix()
