@@ -97,6 +97,7 @@ def decode_CAN_data():
             gps_data.set_lat_long(latitude=lat, longitude=longi) 
             gps_data.set_time(secs=secs, nsecs=nsecs)
         
+<<<<<<< HEAD
         def __ins_expected_velocity_tilt_error():
             in_stddev_VXF=decoded_msgs["In_Stddev_VXF"]
             in_stddev_VYF=decoded_msgs["In_Stddev_VYF"]
@@ -114,6 +115,19 @@ def decode_CAN_data():
         def __default():
             ''' If user enters invalid option then this method will be called '''
             print("Unkonwn ID "+str(can_id))
+=======
+        def __analogin():
+            print("Analog Input data "+can_identifier)
+            #print(can_identifier+" Analog Input data = ", msgs)
+            
+        def __ins_expected_velocity_tilt_error():
+            print("INS Expected Velocity Error and Tilt Error "+can_identifier)
+            #print(can_identifier+" INS Expected Velocity Error and Tilt Error = ", msgs)
+
+        def __default():
+            ''' If user enters invalid option then this method will be called '''
+            print("Unkonwn ID "+can_identifier)
+>>>>>>> 35fcfe02a66aabcbaf000522b0f8339c71050b2b
             unknown_can_id_data.set_types_values(can_id=can_id, can_msgs=decoded_msgs, header=header)
 
         def __get_id(can_id):
@@ -161,9 +175,14 @@ def decode_CAN_data():
         def __publish_to_topic(can_id):
             switcher = {
                 base_id_adma+ 2: __publish_status_errors,
+<<<<<<< HEAD
                 base_id_adma+ 8: __publish_orientation,
                 base_id_adma+49: __publish_orientation,
                 base_id_adma+57: __publish_gps
+=======
+                base_id_adma+49: __publish_orientation,
+                base_id_adma+57: __publish_gps,
+>>>>>>> 35fcfe02a66aabcbaf000522b0f8339c71050b2b
             }
             func = switcher.get(can_id, __default)
             return func()
