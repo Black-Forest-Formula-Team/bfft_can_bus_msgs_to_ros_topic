@@ -67,6 +67,7 @@ catkin_python_setup()
 add_message_files(DIRECTORY msg
   FILES
   Can_id_msg.msg
+  Adma_status_errors_msg.msg
 )
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
