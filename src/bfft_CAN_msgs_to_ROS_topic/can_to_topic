@@ -6,6 +6,8 @@ from std_msgs.msg import String
 from sensor_msgs.msg import NavSatFix, NavSatStatus, Imu
 from can_msgs.msg import Frame
 
+import struct
+
 import transforms3d
 import time
 import cantools
@@ -46,28 +48,20 @@ def decode_CAN_data():
     def __convert_msgs(Frame, decoded_msgs):
         can_id=Frame.id
         header=Frame.header
-        #print(str(decoded_msgs))
-        
-        #print(str(msgs))
               
         secs = header.stamp.secs
         nsecs = header.stamp.nsecs
-        
-        can_identifier = str(can_id)
-        
+                
         def __status_bits():
-            print("Status Bits identifier: "+can_identifier)
             status_errors.set_status(decoded_msgs)            
             
         def __error_bits():
-            print("Error and Warning Bits identifier: "+can_identifier)
             status_errors.set_errors(decoded_msgs)  
             
         def __rates_body():
             x = decoded_msgs["RXB"]
             y = decoded_msgs["RYB"]
             z = decoded_msgs["RZB"]
-            
             imu_data.set_angular_velocity(x,y,z)
                         
         def __acc_body():
@@ -77,7 +71,6 @@ def decode_CAN_data():
             imu_data.set_linear_acceleration(x,y,z)
         
         def __euler_to_quaternions():
-            #print(can_identifier+" Euler data = ")
             roll = decoded_msgs["Angle_Roll"]
             pitch = decoded_msgs["Angle_Pitch"]
             yaw = decoded_msgs["Angle_Yaw"]
@@ -101,24 +94,26 @@ def decode_CAN_data():
             lat = decoded_msgs["In_Lat"]
             longi = decoded_msgs["In_Long"]
             
-            print(longi)
             gps_data.set_lat_long(latitude=lat, longitude=longi) 
             gps_data.set_time(secs=secs, nsecs=nsecs)
         
-        def __analogin():
-            print("Analog Input data "+can_identifier)
-            #print(can_identifier+" Analog Input data = ", msgs)
-            #print(msgs.loc[:,:])
-            
         def __ins_expected_velocity_tilt_error():
-            print("INS Expected Velocity Error and Tilt Error "+can_identifier)
-            #print(can_identifier+" INS Expected Velocity Error and Tilt Error = ", msgs)
-            #print(msgs.loc[:,:])            
+            in_stddev_VXF=decoded_msgs["In_Stddev_VXF"]
+            in_stddev_VYF=decoded_msgs["In_Stddev_VYF"]
+            in_stddev_VZF=decoded_msgs["In_Stddev_VZF"]
+            in_stddev_Roll=decoded_msgs["In_Stddev_Roll"]
+            in_stddev_Pitch=decoded_msgs["In_Stddev_Pitch"]
+            in_stddev_Yaw=decoded_msgs["In_Stddev_Yaw"]
+            
+        def __analog_inputs():
+            analog_in_one=decoded_msgs["AN1"]
+            analog_in_two=decoded_msgs["AN2"]
+            analog_in_three=decoded_msgs["AN3"]
+            analog_in_four=decoded_msgs["AN4"]
 
         def __default():
             ''' If user enters invalid option then this method will be called '''
-            print("Unkonwn ID "+can_identifier)
-            #print(msgs)
+            print("Unkonwn ID "+str(can_id))
             unknown_can_id_data.set_types_values(can_id=can_id, can_msgs=decoded_msgs, header=header)
 
         def __get_id(can_id):
@@ -132,7 +127,7 @@ def decode_CAN_data():
                 base_id_adma+56: __ins_time_utc,
                 base_id_adma+57: __gps_absolut,
                 base_id_adma+83: __ins_expected_velocity_tilt_error,
-                base_id_adma+84: __analogin
+                base_id_adma+84: __analog_inputs
             }
             func = switcher.get(can_id, __default)
             return func()
@@ -141,22 +136,40 @@ def decode_CAN_data():
 
     def __callback(Frame):
         '''Subscribe to CAN messages, decode ADMA and other (TBD) sensor data, then publish data in right format to different topics '''
+        output=None
         if Frame.id < base_id_adma or Frame.id > base_id_adma+84:
-            output = db_sensors.decode_message(Frame.id, Frame.data)
-            print("Please insert ID in DBC Sensor file")
+            #output = db_sensors.decode_message(Frame.id, Frame.data)
+            print("Please insert ID in DBC Sensor file"+Frame.id+" Data: "+str(Frame.data))
         else:
             output = db_adma.decode_message(Frame.id, Frame.data)
-
+            
         if output is not None:
             __convert_msgs(Frame=Frame, decoded_msgs=output)
 
-        # publish saved data from gps and imu objects to topics
-        pub_gps.publish(gps_data.publish_gps_data())
-        pub_imu.publish(imu_data.publish_imu_data())
-        #print(unknown_can_id_data.publish_types_values())
-        pub_unknown_ids.publish(unknown_can_id_data.publish_types_values())
-        pub_status_errors.publish(status_errors.publish_status_errors())
+        def __publish_status_errors():
+            pub_status_errors.publish(status_errors.publish_status_errors())
+        
+        def __publish_orientation():
+            pub_imu.publish(imu_data.publish_imu_data())
+            
+        def __publish_gps():
+            pub_gps.publish(gps_data.publish_gps_data())
+            
+        def __default():
+            pub_unknown_ids.publish(unknown_can_id_data.publish_types_values())
+        
+        def __publish_to_topic(can_id):
+            switcher = {
+                base_id_adma+ 2: __publish_status_errors,
+                base_id_adma+ 8: __publish_orientation,
+                base_id_adma+49: __publish_orientation,
+                base_id_adma+57: __publish_gps
+            }
+            func = switcher.get(can_id, __default)
+            return func()
 
+        __publish_to_topic(Frame.id)
+        
     rospy.init_node('adma_CAN_msg_translator', anonymous=True)
     rospy.Subscriber("received_messages", Frame, __callback, queue_size=50)
     rospy.spin()
