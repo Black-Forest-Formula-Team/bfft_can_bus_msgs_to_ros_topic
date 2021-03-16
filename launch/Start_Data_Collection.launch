@@ -1,5 +1,7 @@
 <launch> 
+    <!-- start ros_canopen to read in CAN-data and write to topic /received -->
     <node pkg="socketcan_bridge" type="socketcan_to_topic_node" name="CAN_node" output="screen"> 
-    </node>    
+    </node>
+    <!-- start conversion of incoming CAN messages and extract data to topics   -->
     <include file="$(find bfft_CAN_msgs_to_ROS_topic)/launch/CAN_to_Topic.launch"/>
 </launch>

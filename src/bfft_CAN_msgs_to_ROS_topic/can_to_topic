@@ -12,8 +12,8 @@ import transforms3d
 import time
 import cantools
 
-from bfft_CAN_msgs_to_ROS_topic.msg import Can_id_msg
-from bfft_CAN_msgs_to_ROS_topic.msg import Adma_status_errors_msg
+from bfft_CAN_msgs_to_ROS_topic.msg import CanIdMsgs
+from bfft_CAN_msgs_to_ROS_topic.msg import AdmaStatusErrorsMsgs
 
 from utilities_IMU.gps_class import GPSClass
 from utilities_IMU.imu_class import IMUClass
@@ -30,8 +30,8 @@ def decode_CAN_data():
     
     pub_gps = rospy.Publisher('imu/gps_data', NavSatFix, queue_size=10)
     pub_imu = rospy.Publisher('imu/imu_data', Imu, queue_size=10)
-    pub_unknown_ids = rospy.Publisher('can/unknown_ids', Can_id_msg, queue_size=10) 
-    pub_status_errors = rospy.Publisher('imu/status_errors', Adma_status_errors_msg, queue_size=10)
+    pub_unknown_ids = rospy.Publisher('can/unknown_ids', CanIdMsgs, queue_size=10) 
+    pub_status_errors = rospy.Publisher('imu/status_errors', AdmaStatusErrorsMsgs, queue_size=10)
     
     # get parameters from launch file
     path_to_adma_dbc_file = rospy.get_param('/can_to_topic/path_to_adma_dbc_file')

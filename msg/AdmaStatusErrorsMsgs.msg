@@ -7,6 +7,7 @@ uint32 seq
 # time-handling sugar is provided by the client library
 time stamp
 
+# Message fields are not in lowercase as usually since they refer to the Adma Slim Message format exactly for easier identification and handling
 bool Stat_Byte0_GPS_Mode
 bool Stat_Byte0_Standstill
 bool Stat_Byte0_Skidding
