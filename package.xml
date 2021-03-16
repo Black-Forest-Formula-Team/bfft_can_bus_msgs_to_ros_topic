@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>bfft_CAN_msgs_to_ROS_topic</name>
+  <name>bfft_can_bus_msgs_to_ros_topic</name>
   <version>0.0.0</version>
-  <description>The convert_can_data_to_topic package</description>
+  <description>The bfft_can_bus_msgs_to_ros_topic package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
