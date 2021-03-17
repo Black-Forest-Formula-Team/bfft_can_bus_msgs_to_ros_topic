@@ -184,7 +184,6 @@ include_directories(
 
 install(PROGRAMS
      #scripts/myscript1
-     src/gps_class
      src/can_to_topic
      DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
