@@ -1,4 +1,4 @@
-# bfft_formula-student_driverless
+# bfft_can_bus_msgs_to_ros_topic
 
 <p align="center">
   <a href="https://blackforestformula.hs-offenburg.de/">
