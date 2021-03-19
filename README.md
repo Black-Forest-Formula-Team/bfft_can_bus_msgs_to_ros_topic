@@ -6,7 +6,7 @@
   </a>
 </p>
 
-# Black Forest Formula Team - Formula Student Driverless 2021
+# Black Forest Formula Team - Read CAN bus messages and forward them to ROS topics
 This package provides the CAN-bus support for the infrastructure of our future autonomous system which is planned for the task to read in all sensor and VCU messages of our first electric racecar we currently develop. This code is created and maintained by the [Black Forest Formula Team](https://blackforestformula.hs-offenburg.de/) at [University of Applied Sciences Offenburg](https://www.hs-offenburg.de/). As this is a subrepository of the overall system you will find more information about the system in the main repository and its [Wiki](https://github.com/Black-Forest-Formula-Team/bfft_formula-student_driverless/wiki).
 
 ____________________
