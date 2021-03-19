@@ -97,6 +97,8 @@ source ~/.bashrc
 ### Connecting IMU and sensors via CAN bus
 For setup refer to this [page](https://github.com/Black-Forest-Formula-Team/bfft_formula-student_driverless/wiki/02-Setup-ADMA-Slim-IMU-from-Genesys-using-CAN).
 
+First you might need to adjust the path to your DBC-file(s) inside the ```CAN_to_Topic.launch``` file. These are important to decode the CAN-messages. When using another IMU you will have to adjust the CAN-IDs in the ```can_to_topic``` file as well.
+
 Start the ROS node to listen to incoming CAN messages with:
 ```
 roslaunch bfft_CAN_msgs_to_ROS_topic Start_Data_Collection.launch 
@@ -108,7 +110,6 @@ rostopic echo /imu/gps_data
 ```
 It is possible to get a list of all available topics by typing ```rostopic list```.
 
-When using another IMU you will have to adjust the CAN-IDs in the ```can_to_topic file```.
 
 
 ________________________________
